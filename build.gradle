@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("co.linkchain:linkchain.common:1.0")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-starter-log4j:1.3.4.RELEASE")
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
+
+ext.moduleName = 'co.linkchain.packages'
+
+bootJar {
+    baseName = 'gs-spring-boot'
+    group = "co.linkchain"
+    version =  '0.1.0'
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("co.linkchain:linkchain.common:1.0")
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    testCompile("junit:junit")
+}
+
+compileJava {
+    inputs.property("moduleName", moduleName)
+    doFirst {
+        options.compilerArgs = [
+                '--module-path', classpath.asPath,
+        ]
+        classpath = files()
+    }
+}
+
+
